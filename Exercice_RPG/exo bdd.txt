@@ -1,0 +1,122 @@
+1.
+	1.SELECT * FROM personnage
+	2.SELECT * FROM arme
+	3.SELECT nom,levelMIN FROM arme
+	4.SELECT nom,surnom,level FROM personnage
+	5.SELECT nom as Pseudo,level as Niveau FROM personnage
+	6.SELECT libelle as `Type d'arme a feu` FROM arme
+2.
+	1.SELECT COUNT(*) FROM arme
+	2.SELECT COUNT(*) FROM personnage
+	3.SELECT AVG(level) FROM personnage
+	4.SELECT SUM(baseForce),SUM(baseAgi),SUM(baseIntel) FROM classe
+	5.SELECT MIN(levelMIN),MAX(levelMIN) FROM arme
+	6.SELECT SUM(baseForce + baseAgi + baseIntel) FROM classe
+3.
+	1.SELECT concat(nom, ' ' ,surnom) FROM personnage
+	2.SELECT concat(nom, ' ' ,baseForce,' ',baseAgi,' ',baseIntel) FROM classe
+	3.SELECT substring(nom,1,6) FROM personnage
+	4SELECT concat(substring(nom,1,5),substring(description,1,20)) FROM classe
+4.
+	1.SELECT * FROM arme WHERE levelMIN>4
+	2.SELECT * FROM arme WHERE degat<25
+	3.SELECT nom , surnom FROM personnage where level=10
+	4.SELECT * FROM typeArme where est distance
+5.
+	1.SELECT * FROM arme where levelMIN>4 AND levelMIN<8
+	2.SELECT * FROM personnage where idPersonnage<3 AND level=10
+	3.SELECT * FROM arme where levelMIN<4 OR levelMIN>=8
+	4.SELECT * FROM arme where degat between 2 OR 30
+	5.SELECT * FROM arme where idArme<=2 AND degat between 25 AND 40
+	6.SELECT * FROM personnage where level!=8 AND level not between 6 and 7 
+	7.SELECT count(*) FROM personnage where level!=10
+	8.SELECT AVG(degat) FROM arme where levelMIN BETWEEN 3 and 7
+6.	
+	1.SELECT * FROM personnage where nom like 'l%'
+	2.SELECT * FROM personnage where nom like 'l%er'
+	3.select * from arme where nom like '%bois%'
+	4.SELECT * FROM arme where nom LIKE 'a_b%'
+	5.SELECT * FROM arme where idArme IN(1,2,4,5,7)
+	6.SELECT * FROM personnage where idPersonnage IN(2,3,4,6) AND level = 10 
+	7.SELECT * FROM personnage where surnom is not null
+	8.SELECT * FROM personnage where surnom is null
+	9.SELECT * FROM personnage LIMIT 3
+	10.SELECT * FROM personnage LIMIT 2 OFFSET 3
+jointure.
+	exemple -> SELECT * FROM personnage INNER JOIN classe ON personnage.idClasse = classe.idClasse
+	SELECT * FROM personnage INNER JOIN classe ON personnage.idClasse = classe.idClasse INNER JOIN arme ON personnage.idArmeUtilise = arme.idTypeArme
+1.
+	1.SELECT * FROM personnage INNER JOIN classe ON personnage.idClasse = classe.idClasse
+	2.SELECT nom, levelMIN, degat,libelle,estDistance FROM arme INNER JOIN typearme ON arme.idTypeArme = typearme.idTypeArme
+2.
+	1.SELECT personnage.nom,classe.nom FROM personnage INNER JOIN classe ON personnage.idClasse = classe.idClasse
+	2.SELECT personnage.nom as nomPersonnage,classe.nom as nomClasse FROM personnage INNER JOIN classe ON personnage.idClasse = classe.idClasse
+	3.SELECT * FROM personnage INNER JOIN arme ON personnage.idArmeUtilise = arme.idTypeArme
+	4.SELECT personnage.nom,arme.nom,arme.levelMIN,arme.degat,typearme.libelle,typearme.estDistance FROM personnage 
+	INNER JOIN arme ON personnage.idArmeUtilise = arme.idArme
+	INNER JOIN typearme ON arme.idTypeArme = typearme.idTypeArme
+	OU 
+	SELECT p.nom,a.nom,a.levelMIN,a.degat,t.libelle,t.estDistance FROM personnage p
+	INNER JOIN arme a ON p.idArmeUtilise = a.idArme
+	INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+3.
+	1.SELECT p.nom,p.level,a.nom,a.levelMIN FROM personnage p 
+	INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+	INNER JOIN arme a ON d.idArme = a.idArme
+	2.SELECT a.nom,a.levelMin,a.degat,t.* FROM arme a
+	INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+	WHERE t.estDistance = false
+	3.SELECT * FROM personnage p 
+	INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+	INNER JOIN arme a ON d.idArme = a.idArme
+	INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+	WHERE p.idClasse = 1
+	4.SELECT p.nom,p.level,a.nom,t.libelle FROM personnage p 
+	INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+	INNER JOIN arme a ON d.idArme = a.idArme
+	INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+	5.SELECT p.nom,p.level,a.nom,t.libelle FROM personnage p 
+	INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+	INNER JOIN arme a ON d.idArme = a.idArme
+	INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+	WHERE estDistance = false
+	6.SELECT * FROM personnage p 
+	INNER JOIN arme a ON p.idArmeUtilise = a.idArme
+	INNER JOIN typearme t ON a.idTypeArme = t.idTypeArme
+	WHERE p.idClasse = 1
+4.
+	1.SELECT p.idPersonnage,p.nom,a.nom,t.libelle FROM personnage p
+INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+INNER JOIN arme a ON d.idArme = a.idArme
+INNER JOIN typearme t ON a.idTypeArme=t.idTypeArme
+WHERE level=10
+	2.SELECT p.idPersonnage,p.nom,a.nom,t.libelle FROM personnage p
+INNER JOIN dispose d ON d.idPersonnage = p.idPersonnage
+INNER JOIN arme a ON d.idArme = a.idArme
+INNER JOIN typearme t ON a.idTypeArme=t.idTypeArme
+WHERE level=10
+ORDER BY idPersonnage DESC(du plus grand)
+	3.SELECT AVG(a.degat) FROM arme a
+INNER JOIN typearme t ON t.idTypeArme = a.idTypeArme
+WHERE estDistance = true
+	4.SELECT * 
+FROM personnage p
+INNER JOIN arme a ON a.idArme = p.idArmeUtilise
+INNER JOIN typearme t ON t.idTypeArme = a.idTypeArme
+WHERE t.libelle
+LIKE "A%"
+5.
+	1.SELECT *
+FROM typearme
+LEFT JOIN arme ON arme.idTypeArme = typearme.idTypeArme
+	2.SELECT * 
+FROM  arme a 
+RIGHT JOIN typearme t ON a.idTypeArme = t.idTypeArme
+	3.SELECT * 
+FROM personnage p
+RIGHT JOIN arme a ON a.idArme = p.idArmeUtilise
+ORDER BY levelMIN
+	4.SELECT * 
+FROM personnage p
+RIGHT JOIN dispose d ON d.idPersonnage = p.idPersonnage
+RIGHT JOIN arme a ON a.idArme = d.idArme
